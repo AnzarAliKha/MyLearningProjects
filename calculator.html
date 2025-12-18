@@ -1,0 +1,36 @@
+<html>
+  <body>
+    <input type="number" placeholder="give me a number" id="number1">
+    <input type="number" placeholder="give me a number" id="number2">
+    <select id="Symbol">
+      <option value="+">+</option>
+      <option value="-">-</option>
+      <option value="/">/</option>
+      <option value="x">x</option>
+    </select>
+    <button onclick="Calculate()">Submit</button>
+    <p id="result"></p>
+    <script>
+      function Calculate(){
+        const n1=Number(document.getElementById("number1").value);//you need to turn it into a number otherwise it takes just element 
+        const n2=Number(document.getElementById("number2").value);
+        const sy=document.getElementById("Symbol");
+        if(sy.value ==="+"){
+          document.getElementById("result").textContent=n1+n2;
+        }
+        else if(sy.value ==="-"){
+          document.getElementById("result").textContent=n1-n2;
+        }
+        else if(sy.value ==="x"){
+          document.getElementById("result").textContent=n1*n2;
+        }
+        else if(sy.value ==="/" ){
+          document.getElementById("result").textContent=n2!=0 ? n1/n2:'Cannot divide by Zero';//this is a if/else but one line its like condition? if true:if false
+        }
+        else{
+          document.getElementById("result").textContent="Error";
+        }
+      };
+    </script>
+  </body>
+</html>
