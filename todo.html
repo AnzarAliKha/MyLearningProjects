@@ -1,0 +1,21 @@
+<html>
+  <body>
+    <input id="userinput">
+    <button onclick="addtask()">Add</button>
+    <ul id="todolist"></ul>
+    <script>
+      function addtask() {
+        const input = document.getElementById("userinput");
+        const list = document.getElementById("todolist");
+        if (input.value.trim() === "") return;
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <p>${input.value}</p>
+          <button onclick="this.parentElement.remove()">✖️</button>
+        `;
+        list.appendChild(li);
+        input.value = "";
+      }
+    </script>
+  </body>
+</html>
