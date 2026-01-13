@@ -1,0 +1,179 @@
+<html>
+  <body>
+
+    <!-- Search bar -->
+    <input id="searchinput" placeholder="Search task" oninput="searchTasks()"> <!--this on input start the searchtasks function-->
+    <hr> <!-- this is just a line-->
+
+    <!-- Task input -->
+    <input id="userinput" placeholder="Enter task"> <!--place to enter your input -->
+    <input id="taskdate" type="date">
+
+    <!-- Priority selector -->
+    <select id="prority">
+      <option value="Highest">Highest</option>
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+
+    <!-- Buttons -->
+    <button onclick="addtask()">Add task</button>
+    <button onclick="sortbyprority()">Sort by priority</button>
+    <button onclick="sortbydate()">Sort by date</button>
+
+    <hr>
+
+    <!-- Task list -->
+    <div id="tasks"></div>
+
+  </body>
+
+  <script>
+
+    // Priority ranking
+    //this is a ranking of value the lower the number higer the prority
+    const priorityOrder = {
+      "Highest": 1,
+      "High": 2,
+      "Medium": 3,
+      "Low": 4
+    };
+
+    // Create a task element
+    function createTask(name, date, priority) {
+      const list = document.getElementById("tasks"); //this gets the tasks div
+
+      const task = document.createElement("div"); //this creates a child div in tasks
+      task.className = "task";
+
+      task.innerHTML = `
+        <span class="task-name">${name}</span> |
+        <span class="task-date">${date}</span> |
+        <span class="task-priority">${priority}</span>
+
+        <button onclick="editTask(this)">✏️</button>
+        <button onclick="deletetask(this)">✖️</button>
+      `;
+
+      list.appendChild(task); //this add the task into tasks list using append
+    }
+
+    // Add new task
+    function addtask() {
+      const input = document.getElementById("userinput").value;
+      const date = document.getElementById("taskdate").value;
+      const priority = document.getElementById("prority").value;
+
+      if (input === "") return;
+
+      createTask(input, date, priority);
+      saveTasks();
+
+      document.getElementById("userinput").value = "";
+    }
+
+    // Delete task
+    function deletetask(btn) {
+      btn.parentElement.remove();
+      saveTasks();
+    }
+
+    // Edit task
+    function editTask(btn) {
+      const taskDiv = btn.parentElement;
+
+      const nameSpan = taskDiv.querySelector(".task-name");
+      const dateSpan = taskDiv.querySelector(".task-date");
+      const prioritySpan = taskDiv.querySelector(".task-priority");
+
+      // Ask user for new values
+      const newName = prompt("Edit task name:", nameSpan.textContent);
+      if (newName === null || newName === "") return;
+
+      const newDate = prompt("Edit task date (YYYY-MM-DD):", dateSpan.textContent);
+      if (newDate === null || newDate === "") return;
+
+      const newPriority = prompt("Edit priority (Highest, High, Medium, Low):", prioritySpan.textContent);
+      if (newPriority === null || newPriority === "") return;
+
+      // Update values
+      nameSpan.textContent = newName;
+      dateSpan.textContent = newDate;
+      prioritySpan.textContent = newPriority;
+
+      saveTasks();
+    }
+
+    // Save tasks to localStorage
+    function saveTasks() {
+      const tasks = [];
+      const taskElements = document.querySelectorAll(".task");
+
+      taskElements.forEach(task => {
+        const name = task.querySelector(".task-name").textContent;
+        const date = task.querySelector(".task-date").textContent;
+        const priority = task.querySelector(".task-priority").textContent;
+
+        tasks.push({ name, date, priority });
+      });
+
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    // Load tasks from localStorage
+    function loadTasks() {
+      const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+      savedTasks.forEach(task => {
+        createTask(task.name, task.date, task.priority);
+      });
+    }
+
+    // Sort by priority
+    function sortbyprority() {
+      const list = document.getElementById("tasks");
+      const tasks = Array.from(list.children);
+
+      tasks.sort((a, b) => {
+        const p1 = a.querySelector(".task-priority").textContent;
+        const p2 = b.querySelector(".task-priority").textContent;
+        return priorityOrder[p1] - priorityOrder[p2];
+      });
+
+      list.innerHTML = "";
+      tasks.forEach(task => list.appendChild(task));
+      saveTasks();
+    }
+
+    // Sort by date
+    function sortbydate() {
+      const list = document.getElementById("tasks");
+      const tasks = Array.from(list.children);
+
+      tasks.sort((a, b) => {
+        const d1 = new Date(a.querySelector(".task-date").textContent);
+        const d2 = new Date(b.querySelector(".task-date").textContent);
+        return d1 - d2;
+      });
+
+      list.innerHTML = "";
+      tasks.forEach(task => list.appendChild(task));
+      saveTasks();
+    }
+
+    
+    function searchTasks() {
+      const search = document.getElementById("searchinput").value.toLowerCase();
+      const tasks = document.querySelectorAll(".task");
+
+      tasks.forEach(task => {
+        const name = task.querySelector(".task-name").textContent.toLowerCase();
+        task.style.display = name.includes(search) ? "block" : "none";
+      });
+    }
+
+    window.onload = loadTasks;
+
+  </script>
+</html>
