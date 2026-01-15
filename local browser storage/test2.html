@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Favourite Page</title>
+  </head>
+  <body>
+    <h1>Your Favourites</h1>
+    <ul id="favouriteList"></ul>
+
+    <script>
+      const favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+
+      const list = document.getElementById("favouriteList");
+
+      if (favourites.length === 0) {
+        list.innerHTML = "<li>No favourites yet!</li>";
+      } else {
+        favourites.forEach(story => {
+          const li = document.createElement("li");
+          li.innerText = story;
+          list.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>Main Page</title>
+  </head>
+  <body>
+
+    <div class="story">
+      <h2>Story One</h2>
+      <button onclick="addtofavourite('Story One')">Add to favourite</button>
+    </div>
+
+    <div class="story">
+      <h2>Story Two</h2>
+      <button onclick="addtofavourite('Story Two')">Add to favourite</button>
+    </div>
+
+    <div class="story">
+      <h2>Story Three</h2>
+      <button onclick="addtofavourite('Story Three')">Add to favourite</button>
+    </div>
+
+    <script>
+      function addtofavourite(title) {
+        let favourites = JSON.parse(localStorage.getItem("favourites")) || [];
+        if (!favourites.includes(title)) {
+          favourites.push(title);
+          localStorage.setItem("favourites", JSON.stringify(favourites));
+          alert("Added to favourites!");
+        } else {
+          alert("Already in favourites!");
+        }
+      }
+    </script>
+
+  </body>
+</html>
