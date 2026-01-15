@@ -1,0 +1,18 @@
+<html>
+    <body>
+        <button onclick="changecolor()">Click to change color</button>
+    </body>
+    <script>
+        function changecolor(){
+            document.body.style.backgroundColor="green";
+            savelocal();
+        }
+        function savelocal(){
+            localStorage.setItem("backgroundColor","green");
+        }
+        const savedcolor=localStorage.getItem("backgroundColor");
+        if(savedcolor){
+            document.body.style.backgroundColor=savedcolor;
+        }
+    </script>
+</html>
